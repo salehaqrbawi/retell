@@ -1,28 +1,27 @@
-// server.js
-
 const express = require("express");
-const bodyParser = require("body-parser");
 const { orders } = require("./db");
 
 const app = express();
-//app.use(bodyParser.json());
 app.use(express.json());
 
-// POST /orders/check - Get order by ID from body
-app.post("/orders/check", express.json(), (req, res) => {
-  console.log("Received body:", req.body);
+// Utility to extract body (handles Retell AI "args" or raw body)
+function extractBody(req) {
+  const raw = req.body?.args || req.body;
 
-  let body = req.body;
-
-  // Handle stringified JSON in body (Retell bug workaround)
-  if (typeof body === "string") {
+  if (typeof raw === "string") {
     try {
-      body = JSON.parse(body);
+      return JSON.parse(raw);
     } catch (e) {
-      return res.status(400).json({ error: "Malformed JSON body" });
+      return {};
     }
   }
 
+  return raw;
+}
+
+// ✅ POST /orders/check
+app.post("/orders/check", (req, res) => {
+  const body = extractBody(req);
   const { order_id } = body;
 
   if (!order_id) {
@@ -30,7 +29,6 @@ app.post("/orders/check", express.json(), (req, res) => {
   }
 
   const order = orders.find((o) => o.id === order_id);
-
   if (!order) {
     return res.status(404).json({ error: "Order not found" });
   }
@@ -47,9 +45,10 @@ app.post("/orders/check", express.json(), (req, res) => {
   });
 });
 
-// POST /orders/by-email - Get all orders for a specific email
+// ✅ POST /orders/byemail
 app.post("/orders/byemail", (req, res) => {
-  const { email } = req.body;
+  const body = extractBody(req);
+  const { email } = body;
 
   if (!email) {
     return res.status(400).json({ error: "email is required" });
@@ -64,7 +63,7 @@ app.post("/orders/byemail", (req, res) => {
   res.json(userOrders);
 });
 
-// Get all orders by email
+// GET all orders by email
 app.get("/orders", (req, res) => {
   const email = req.query.email;
   if (!email) return res.status(400).json({ error: "Email is required" });
@@ -73,7 +72,7 @@ app.get("/orders", (req, res) => {
   res.json(userOrders);
 });
 
-// Get a specific order by ID
+// GET order by ID
 app.get("/orders/:orderId", (req, res) => {
   const order = orders.find((o) => o.id === req.params.orderId);
   if (!order) return res.status(404).json({ error: "Order not found" });
@@ -81,7 +80,7 @@ app.get("/orders/:orderId", (req, res) => {
   res.json(order);
 });
 
-// Refund an order
+// ✅ POST /orders/:orderId/refund
 app.post("/orders/:orderId/refund", (req, res) => {
   const order = orders.find((o) => o.id === req.params.orderId);
   if (!order) return res.status(404).json({ error: "Order not found" });
