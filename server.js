@@ -63,6 +63,37 @@ app.post("/orders/byemail", (req, res) => {
   res.json(userOrders);
 });
 
+// ✅ POST /orders/refund - Refund using order_id from body (Retell-compatible)
+app.post("/orders/refund", (req, res) => {
+  const body = extractBody(req);
+  const { order_id } = body;
+
+  if (!order_id) {
+    return res.status(400).json({ error: "order_id is required" });
+  }
+
+  const order = orders.find((o) => o.id === order_id);
+  if (!order) {
+    return res.status(404).json({ error: "Order not found" });
+  }
+
+  if (order.status === "refunded") {
+    return res.status(400).json({ error: "Order already refunded" });
+  }
+
+  if (["pending", "shipped", "delivered"].includes(order.status)) {
+    order.status = "refunded";
+    return res.json({
+      message: `Refund initiated for order ${order.id}.`,
+      order,
+    });
+  }
+
+  res.status(400).json({
+    error: `Cannot refund order with status: ${order.status}`,
+  });
+});
+
 // GET all orders by email
 app.get("/orders", (req, res) => {
   const email = req.query.email;
