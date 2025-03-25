@@ -1,0 +1,81 @@
+// db.js
+
+const orders = [
+  {
+    id: "order_001",
+    email: "john@example.com",
+    items: [
+      { name: "Laptop", price: 1200, qty: 1 },
+      { name: "Mouse", price: 50, qty: 2 },
+    ],
+    total: 1300,
+    status: "delivered",
+    createdAt: "2025-03-01T10:00:00Z",
+    expectedDelivery: "2025-03-05T00:00:00Z",
+    deliveryAddress: {
+      name: "John Doe",
+      street: "123 Main St",
+      city: "New York",
+      state: "NY",
+      zip: "10001",
+      country: "USA",
+    },
+    shippingIssue: null,
+  },
+  {
+    id: "order_002",
+    email: "john@example.com",
+    items: [{ name: "Keyboard", price: 80, qty: 1 }],
+    total: 80,
+    status: "pending",
+    createdAt: "2025-03-20T14:45:00Z",
+    expectedDelivery: "2025-03-27T00:00:00Z",
+    deliveryAddress: {
+      name: "John Doe",
+      street: "123 Main St",
+      city: "New York",
+      state: "NY",
+      zip: "10001",
+      country: "USA",
+    },
+    shippingIssue: null,
+  },
+  {
+    id: "order_003",
+    email: "jane@example.com",
+    items: [{ name: "Monitor", price: 300, qty: 1 }],
+    total: 300,
+    status: "shipped",
+    createdAt: "2025-03-18T09:20:00Z",
+    expectedDelivery: "2025-03-25T00:00:00Z",
+    deliveryAddress: {
+      name: "Jane Smith",
+      street: "456 Elm Ave",
+      city: "Los Angeles",
+      state: "CA",
+      zip: "90001",
+      country: "USA",
+    },
+    shippingIssue: "Carrier delayed – snowstorm",
+  },
+  {
+    id: "order_004",
+    email: "jane@example.com",
+    items: [{ name: "Tablet", price: 500, qty: 1 }],
+    total: 500,
+    status: "refunded",
+    createdAt: "2025-02-10T12:30:00Z",
+    expectedDelivery: "2025-02-15T00:00:00Z",
+    deliveryAddress: {
+      name: "Jane Smith",
+      street: "456 Elm Ave",
+      city: "Los Angeles",
+      state: "CA",
+      zip: "90001",
+      country: "USA",
+    },
+    shippingIssue: "Item damaged in transit",
+  },
+];
+
+module.exports = { orders };
