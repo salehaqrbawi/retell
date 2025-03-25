@@ -9,12 +9,16 @@ const app = express();
 app.use(express.json());
 
 // POST /orders/check - Get order by ID from body
-app.post("/orders/check", (req, res) => {
-  const body = req.body;
+app.post("/orders/check", express.json(), (req, res) => {
+  let body = req.body;
 
-  // Check if body exists and is a valid object
-  if (!body || typeof body !== "object") {
-    return res.status(400).json({ error: "Invalid request format" });
+  // Handle stringified JSON in body (Retell bug workaround)
+  if (typeof body === "string") {
+    try {
+      body = JSON.parse(body);
+    } catch (e) {
+      return res.status(400).json({ error: "Malformed JSON body" });
+    }
   }
 
   const { order_id } = body;
@@ -29,7 +33,16 @@ app.post("/orders/check", (req, res) => {
     return res.status(404).json({ error: "Order not found" });
   }
 
-  res.json(order);
+  res.json({
+    ...order,
+    message: `Order ${order.id} is currently ${
+      order.status
+    }. It was placed on ${new Date(
+      order.createdAt
+    ).toDateString()}, and expected delivery is ${new Date(
+      order.expectedDelivery
+    ).toDateString()}.`,
+  });
 });
 
 // POST /orders/by-email - Get all orders for a specific email
