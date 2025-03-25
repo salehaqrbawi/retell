@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const { orders } = require("./db");
 
 const app = express();
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+app.use(express.json());
 
 // POST /orders/check - Get order by ID from body
 app.post("/orders/check", (req, res) => {
