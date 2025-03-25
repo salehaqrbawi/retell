@@ -10,6 +10,8 @@ app.use(express.json());
 
 // POST /orders/check - Get order by ID from body
 app.post("/orders/check", express.json(), (req, res) => {
+  console.log("Received body:", req.body);
+
   let body = req.body;
 
   // Handle stringified JSON in body (Retell bug workaround)
