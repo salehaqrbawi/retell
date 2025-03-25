@@ -9,18 +9,26 @@ app.use(bodyParser.json());
 
 // POST /orders/check - Get order by ID from body
 app.post("/orders/check", (req, res) => {
-  const { order_id } = req.body;
+  const body = req.body;
+
+  // Check if body exists and is a valid object
+  if (!body || typeof body !== "object") {
+    return res.status(400).json({ error: "Invalid request format" });
+  }
+
+  const { order_id } = body;
 
   if (!order_id) {
     return res.status(400).json({ error: "order_id is required" });
   }
 
   const order = orders.find((o) => o.id === order_id);
+
   if (!order) {
     return res.status(404).json({ error: "Order not found" });
   }
 
-  res.json(order); // returns full order details
+  res.json(order);
 });
 
 // POST /orders/by-email - Get all orders for a specific email
