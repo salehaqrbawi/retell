@@ -2,7 +2,7 @@
 
 const orders = [
   {
-    id: "order_001",
+    id: "123",
     email: "john@example.com",
     items: [
       { name: "Laptop", price: 1200, qty: 1 },
@@ -23,7 +23,7 @@ const orders = [
     shippingIssue: null,
   },
   {
-    id: "order_002",
+    id: "1234",
     email: "john@example.com",
     items: [{ name: "Keyboard", price: 80, qty: 1 }],
     total: 80,
@@ -41,7 +41,7 @@ const orders = [
     shippingIssue: null,
   },
   {
-    id: "order_003",
+    id: "12345",
     email: "jane@example.com",
     items: [{ name: "Monitor", price: 300, qty: 1 }],
     total: 300,
@@ -59,7 +59,7 @@ const orders = [
     shippingIssue: "Carrier delayed – snowstorm",
   },
   {
-    id: "order_004",
+    id: "123456",
     email: "jane@example.com",
     items: [{ name: "Tablet", price: 500, qty: 1 }],
     total: 500,
