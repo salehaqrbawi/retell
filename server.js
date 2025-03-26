@@ -6,7 +6,7 @@ app.use(express.json());
 
 // Utility to extract body (handles Retell AI "args" or raw body)
 function extractBody(req) {
-  const raw = req.body?.args || req.body;
+  const raw = req.body;
 
   if (typeof raw === "string") {
     try {
